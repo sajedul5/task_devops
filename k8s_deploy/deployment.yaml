@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-devops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: taskdevops
+  template:
+    metadata:
+      labels:
+        app: taskdevops
+    spec:
+      containers:
+        - name: taskdevops
+          image: sajedul5/task_devops:v1  
+          ports:
+            - containerPort: 5000
