@@ -22,6 +22,7 @@ jobs:
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_TAG: v1
       run: |
         cd REST_API  # Change to the directory containing your FastAPI code
         DOCKER_TAG=${{ github.event.release.tag_name }}
