@@ -9,6 +9,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_TAG: v1
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -19,17 +27,21 @@ jobs:
         python-version: 3.9
 
     - name: Build and push Docker image
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        # DOCKER_TAG: v1
       run: |
-        cd REST_API  
-        # DOCKER_TAG=${{ github.event.release.tag_name }}
+        cd REST_API
         # if [ -z "$DOCKER_TAG" ]; then
-        #   echo "ERROR: Release tag is empty."
+        #   echo "ERROR: Docker image tag is empty."
         #   exit 1
         # fi
-        docker build -t sajedul5/task_devops:v1 .
+        docker build -t sajedul5/task_devops:${DOCKER_TAG} .
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        docker push sajedul5/task_devops:v1
+        docker push sajedul5/task_devops:${DOCKER_TAG}
+
+    - name: Configure kubectl and Authenticate with EKS
+      run: |
+        aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name your-eks-cluster-name
+
+    - name: Apply Kubernetes Manifests
+      run: |
+        kubectl apply -f k8s_deploy/deployment.yaml
+        kubectl apply -f k8s_deploy/service.yaml
