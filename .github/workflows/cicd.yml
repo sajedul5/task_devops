@@ -22,14 +22,14 @@ jobs:
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        DOCKER_TAG: v1
+        # DOCKER_TAG: v1
       run: |
         cd REST_API  # Change to the directory containing your FastAPI code
-        DOCKER_TAG=${{ github.event.release.tag_name }}
-        if [ -z "$DOCKER_TAG" ]; then
-          echo "ERROR: Release tag is empty."
-          exit 1
-        fi
-        docker build -t sajedul5/task_devops:${DOCKER_TAG} .
+        # DOCKER_TAG=${{ github.event.release.tag_name }}
+        # if [ -z "$DOCKER_TAG" ]; then
+        #   echo "ERROR: Release tag is empty."
+        #   exit 1
+        # fi
+        docker build -t sajedul5/task_devops:v1 .
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        docker push sajedul5/task_devops:${DOCKER_TAG}
+        docker push sajedul5/task_devops:v1
