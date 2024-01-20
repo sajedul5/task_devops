@@ -39,7 +39,7 @@ jobs:
 
     - name: Configure kubectl and Authenticate with EKS
       run: |
-        aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name your-eks-cluster-name
+        aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name my-eks-cluster
 
     - name: Apply Kubernetes Manifests
       run: |
